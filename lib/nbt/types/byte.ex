@@ -1,4 +1,8 @@
 defmodule NBT.Types.Byte do
+  @moduledoc false
+
+  use NBT.Types.Inspect, :single
+
   defstruct name: nil,
             data: <<>>
 
@@ -16,16 +20,6 @@ defmodule NBT.Types.Byte do
 
     def add_content({ctx, <<value :: binary-size(1)-unit(8), data :: binary>>, _}) do
       {struct(ctx, data: value), data}
-    end
-  end
-
-  defimpl Inspect, for: __MODULE__ do
-    import Inspect.Algebra
-
-    def inspect(ctx, opts) do
-      concat [
-        to_doc(ctx.__struct__, opts), "(", to_doc(ctx.name || "None", opts), ") { ",
-        to_doc(ctx.data, opts), " }"]
     end
   end
 end

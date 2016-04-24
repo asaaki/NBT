@@ -1,4 +1,6 @@
 defprotocol NBT.Decoder do
+  @moduledoc false
+
   @fallback_to_any true
 
   def decode(type, data, named)

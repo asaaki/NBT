@@ -7,22 +7,23 @@ defmodule NBT.Mixfile do
     [
       app: :nbt,
       version: @version,
-      elixir: "~> 1.1",
+      elixir: "~> 1.2",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
       deps: deps
     ]
   end
 
-  def application do
-    [
-      applications: [:logger]
-    ]
-  end
+  def application, do: []
 
   defp deps do
     [
-      {:benchfella, "~> 0.3", only: [:dev, :test, :bench, :prod]}
+      {:credo, "~> 0.3", only: [:lint, :ci]},
+      {:ex_doc, "~> 0.11", only: [:docs, :ci]},
+      {:cmark, "~> 0.6", only: [:docs, :ci]},
+      {:inch_ex, "~> 0.5", only: [:docs, :ci]},
+      {:excoveralls, "~> 0.5", only: [:ci]},
+      {:benchfella, "~> 0.3", only: [:dev, :test, :bench, :prod]},
     ]
   end
 end

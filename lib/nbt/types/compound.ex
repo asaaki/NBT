@@ -1,4 +1,8 @@
 defmodule NBT.Types.Compound do
+  @moduledoc false
+
+  use NBT.Types.Inspect, :collection
+
   defstruct name: nil,
             data: []
 
@@ -6,6 +10,7 @@ defmodule NBT.Types.Compound do
 
   defimpl NBT.Decoder, for: __MODULE__ do
     import NBT.Decodable
+    alias NBT.Decode
 
     def decode(ctx, data, named) do
       ctx
@@ -23,24 +28,12 @@ defmodule NBT.Types.Compound do
       do: decode_chunks(data, [])
 
     def decode_chunks(data, list) do
-      case NBT.Decode.decode(data) do
+      case Decode.decode(data) do
         {:COMPOUND_END, rest} ->
           {rest, Enum.reverse(list)}
         {item, rest} ->
           decode_chunks(rest, [item|list])
       end
-    end
-  end
-
-  defimpl Inspect, for: __MODULE__ do
-    import Inspect.Algebra
-
-    def inspect(ctx, opts) do
-      concat [
-        to_doc(ctx.__struct__, opts), "(", to_doc(ctx.name || "None", opts),
-        ", entries: ", to_doc(length(ctx.data), opts) ,") ",
-        to_doc(ctx.data, opts)
-      ]
     end
   end
 end

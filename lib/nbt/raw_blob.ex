@@ -1,6 +1,8 @@
 defmodule NBT.RawBlob do
   @moduledoc false
 
+  alias NBT.{Blob, Decode}
+
   @empty_blob_data <<10,0,0,0>>
 
   defstruct name: nil,
@@ -35,14 +37,14 @@ defmodule NBT.RawBlob do
   def decode_data(%{name: name, raw: data}) do
     case maybe_decode_data(data) do
       {:ok, result} ->
-        {:ok, %NBT.Blob{name: name, data: result}}
+        {:ok, %Blob{name: name, data: result}}
       error ->
         error
     end
   end
 
   defp maybe_decode_data(data) do
-    case NBT.Decode.decode(data) do
+    case Decode.decode(data) do
       {data, <<>>} ->
         {:ok, data}
       _ ->

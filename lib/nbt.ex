@@ -5,14 +5,16 @@ defmodule NBT do
   A library to decode and encode NBT files/data.
   """
 
+  alias NBT.Blob
+
   @doc "Decode an unnamed NBT data blob"
   def decode(data) do
-    data |> NBT.Blob.decode
+    data |> Blob.decode
   end
 
   @doc "Decode an NBT data blob with a given (path) name for reference"
   def decode(data, path_or_name) do
-    data |> NBT.Blob.decode(path_or_name)
+    data |> Blob.decode(path_or_name)
   end
 
   @doc "Decode an uncompressed NBT file"

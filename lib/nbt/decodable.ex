@@ -1,4 +1,5 @@
 defmodule NBT.Decodable do
+  @moduledoc false
 
   def to_state(ctx, data, named) do
     {ctx, data, named}

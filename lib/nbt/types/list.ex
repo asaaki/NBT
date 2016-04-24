@@ -1,4 +1,8 @@
 defmodule NBT.Types.List do
+  @moduledoc false
+
+  use NBT.Types.Inspect, :collection
+
   defstruct name: nil,
             data_type: nil,
             data: []
@@ -7,6 +11,7 @@ defmodule NBT.Types.List do
 
   defimpl NBT.Decoder, for: __MODULE__ do
     import NBT.Decodable
+    alias NBT.Decode
 
     def decode(ctx, data, named) do
       ctx
@@ -39,20 +44,8 @@ defmodule NBT.Types.List do
     def decode_chunks(data, _, 0, list),
       do: {data, Enum.reverse(list)}
     def decode_chunks(data, data_type, list_size, list) do
-      {item, rest} = NBT.Decode.decode_typed(data_type, data, false)
+      {item, rest} = Decode.decode_typed(data_type, data, false)
       decode_chunks(rest, data_type, list_size - 1, [item|list])
-    end
-  end
-
-  defimpl Inspect, for: __MODULE__ do
-    import Inspect.Algebra
-
-    def inspect(ctx, opts) do
-      concat [
-        to_doc(ctx.__struct__, opts), "(", to_doc(ctx.name || "None", opts),
-        ", entries: ", to_doc(length(ctx.data), opts) ,") ",
-        to_doc(ctx.data, opts)
-      ]
     end
   end
 end

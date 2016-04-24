@@ -1,4 +1,8 @@
 defmodule NBT.Types.IntArray do
+  @moduledoc false
+
+  use NBT.Types.Inspect, :single
+
   defstruct name: nil,
             data: []
 
@@ -24,16 +28,5 @@ defmodule NBT.Types.IntArray do
       do: Enum.reverse(list)
     def bytes_to_ints(<<i :: big-signed-integer-size(32), r :: binary>>, list),
       do: bytes_to_ints(r, [i|list])
-  end
-
-  defimpl Inspect, for: __MODULE__ do
-    import Inspect.Algebra
-
-    def inspect(ctx, opts) do
-      concat [
-        to_doc(ctx.__struct__, opts), "(", to_doc(ctx.name || "None", opts), ") { ",
-        to_doc(ctx.data, opts), " }"
-      ]
-    end
   end
 end
